@@ -12,22 +12,28 @@ const propSocial = ['twitter_username', 'blog', 'location', 'company'];
 function initialize() {
 	header.innerText = 'Username';
 	bio.innerText = 'This is a bio';
-	avatar.removeChild(avatar.childNodes[0]);
-	tds.forEach((element, index) => {
-		element.innerText = "0";
+	avatar.innerHTML = '';
+	tds.forEach((element) => {
+		element.innerText = '0';
 	});
-	socials.forEach((element, index) => {
+	socials.forEach((element) => {
 		element.innerText = 'Not Available';
 	});
 }
 
 form.addEventListener('submit', async (e) => {
 	e.preventDefault();
+	initialize();
 	const userData = await fetchUser(input.value);
 	console.log(userData);
 	header.innerText = userData.name;
 	bio.innerText = userData.bio;
-	show_image(avatar, userData.avatar_url);
+	var img = document.createElement('img');
+	img.src = userData.avatar_url;
+	img.width = 100;
+	img.height = 100;
+	img.alt = 'avatar';
+	avatar.appendChild(img);
 	tds.forEach((element, index) => {
 		element.innerText = userData[prop[index]];
 	});
@@ -42,13 +48,4 @@ function fetchUser(username) {
 		.then((data) => {
 			return data;
 		});
-}
-
-function show_image(parentNode, src) {
-	var img = document.createElement('img');
-	img.src = src;
-	img.width = 100;
-	img.height = 100;
-	img.alt = 'avatar';
-	parentNode.appendChild(img);
 }
